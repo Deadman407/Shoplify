@@ -2,7 +2,7 @@ from django.conf import settings
 
 from store.models import Product
 
-class Cart(object):
+class Cart():
     def __init__(self, request):
         self.session = request.session
         cart = self.session.get(settings.CART_SESSION_ID)
@@ -14,7 +14,6 @@ class Cart(object):
 
     def __iter__(self):
         product_ids = self.cart.keys()
-
         product_clean_ids = []
 
         for p in product_ids:

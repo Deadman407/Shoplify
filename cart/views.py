@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render
 
 from .cart import Cart
@@ -14,6 +15,13 @@ def cart_detail(request):
 
     context = {
         'cart': cart,
+        'pub_key': settings.STRIPE_API_KEY_PUBLISHABLE,
         'productstring': productstring
     }
     return render(request, 'cart.html', context)
+
+def success(request):
+    cart = Cart(request)
+    cart.clear()
+    
+    return render(request, 'success.html')

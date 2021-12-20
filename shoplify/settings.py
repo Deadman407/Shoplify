@@ -10,6 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+STRIPE_API_KEY_PUBLISHABLE = "pk_test_51K8M8ySJddrzFxK3O1pj6tM9KylygJAOMQwejvK0pPI9jVhaP6PbmutnFQBo5GhbwNziAZR4DAYEUkfqRoLEB7Q10005j5TwEm"
+STRIPE_API_KEY_HIDDEN = "sk_test_51K8M8ySJddrzFxK3zvehyX0BsMcyW1nNJw94I7HpqFcKdMHVFkeWFcFpyZv9U9CSHBnJXkXSMhBA2ttQrVWB9d1000MwbJWtmY"
+
 import os
 from pathlib import Path
 
@@ -45,7 +48,8 @@ INSTALLED_APPS = [
     'core',
     'store',
     'cart',
-    'order'
+    'order',
+    'coupon'
 ]
 
 MIDDLEWARE = [
@@ -71,7 +75,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'store.context_processors.menu_categories'
+                'store.context_processors.menu_categories',
+                'cart.context_processors.cart'
             ],
         },
     },

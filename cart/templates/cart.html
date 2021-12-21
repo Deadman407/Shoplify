@@ -32,8 +32,25 @@
                             <td>[[ numItems ]]</td>
                             <td>₹[[ totalCost ]]</td>
                         </tr>
+
+                        <tr v-if="coupon_value">
+                            <td colspan="3">Total cost with coupon:</td>
+                            <td>[[ totalCostWithCoupon ]]</td>
+                        </tr>
                     </tfoot>
                 </table>
+                
+                <hr>
+
+                Code value:<br>
+                <input type="text" v-model="coupon_value"><br>
+
+                Code:<br>
+                <input type="text" v-model="coupon_code"><br>
+
+                <button @click="applyCoupon()">Apply</button>
+
+                <hr>
             </div>
 
             <form v-on:submit.prevent="submitForm()">
@@ -119,7 +136,9 @@
                 address: '',
                 zipcode: '',
                 place: '',
-                products: [{{ productstring|safe }}]
+                products: [{{ productstring|safe }}],
+                coupon_value: 0,
+                coupon_code: ''
             }
         },
         computed: {
@@ -128,9 +147,33 @@
             },
             totalCost: function() {
                 return store.state.totalCost
+            },
+            totalCostWithCoupon: function() {
+                if (this.coupon_value > 0) {
+                    return store.state.totalCost * (parseInt(this.coupon_value) / 100)
+                } else {
+                    return store.state.totalCost
+                }
             }
         },
         methods: {
+            applyCoupon() {
+                if (this.coupon_code !== '') {
+                    fetch('/api/can_use/?coupon_code' + this.coupon_code, {
+                        method: 'GET'
+                    })
+                    .then((response) => {
+                        return response.json();
+                    })
+                    .then((data) => {
+                        if (data.amount){
+                            this.coupon_value = parseInt(data.amount)
+                        } else {
+                            this.coupon_value = 0
+                        }
+                    })
+                }
+            },
             buy() {
                 var data = {
                     'first_name': this.first_name,

@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 
-from .models  import Coupon
+from .models import Coupon
 
 def api_can_use(request):
     json_response = {}

@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from core.views import frontpage, contact, about
-from store.views import product_detail, category_detail
+from store.views import product_detail, category_detail, search
 from cart.views import cart_detail, success
 from cart.webhook import webhook
 from coupon.api import api_can_use
@@ -34,6 +34,7 @@ urlpatterns = [
     path('about/', about, name='about'),
     path('cart/', cart_detail, name='cart'),
     path('hooks/', webhook, name='webhook'),
+    path('search/', search, name='search'),
 
     #API
 

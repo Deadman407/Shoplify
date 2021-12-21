@@ -60,7 +60,4 @@ class Cart():
         return sum(int(item['quantity']) for item in self.cart.values())
 
     def get_total_cost(self):
-        try:
-            return sum(float(item['total_price']) for item in self.cart.values())
-        except Exception:
-            return 0
+            return sum(float(item['total_price']) for item in self)

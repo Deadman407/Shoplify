@@ -4,6 +4,8 @@ import stripe
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 from order.models import Order
 
@@ -29,5 +31,13 @@ def webhook(request):
         order = Order.objects.get(payment_intent=payment_intent.id)
         order.paid = True
         order.save()
+
+        for item in order.items.all():
+            product = item.product
+            product.num_available = product.num_avauilable - item.quantity
+            product.save()
+
+        html = render_to_string('order_confirmation.html', {'orders': orders})
+        send_mail('Order confirmation', 'Your order has been sent!', 'noreply@shoplify.com', ['mail@shoplify.com', order.email], fail_silently=True, html_message=html)
 
     return HttpResponse(status=200)

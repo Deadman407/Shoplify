@@ -1,5 +1,7 @@
 import datetime
 from django.contrib import admin
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 from .models import Order, OrderItem
 
@@ -12,6 +14,9 @@ def admin_order_shipped(modeladmin, request, queryset):
         order.shipped_date = datetime.datetime.now()
         order.status = Order.SHIPPED
         order.save()
+
+        html = render_to_string('order_sent.html', {'orders': orders})
+        send_mail('Order confirmation', 'Your order is successful!', 'noreply@shoplify.com', ['mail@shoplify.com', order.email], fail_silently=True, html_message=html)
     return 
 admin_order_shipped.short_description = 'Set shipped'
 

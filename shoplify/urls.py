@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 
-from core.views import frontpage, contact, about
+from core.views import frontpage, contact, about, order_confirmation
 from store.views import product_detail, category_detail, search
 from cart.views import cart_detail, success
 from cart.webhook import webhook
@@ -39,6 +39,7 @@ urlpatterns = [
     path('cart/', cart_detail, name='cart'),
     path('hooks/', webhook, name='webhook'),
     path('search/', search, name='search'),
+    path('order_confirmation/', order_confirmation, name='order_confirmation'),
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 

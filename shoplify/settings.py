@@ -58,7 +58,8 @@ INSTALLED_APPS = [
     'cart',
     'order',
     'coupon',
-    'userprofile'
+    'userprofile',
+    'newsletter'
 ]
 
 MIDDLEWARE = [

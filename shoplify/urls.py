@@ -25,8 +25,9 @@ from store.views import product_detail, category_detail, search
 from cart.views import cart_detail, success
 from cart.webhook import webhook
 from coupon.api import api_can_use
-from userprofile.views import signup
+from userprofile.views import signup, myaccount
 
+from newsletter.api import api_add_subscriber
 from store.api import api_add_to_cart, api_remove_from_cart, create_checkout_session
 from .sitemaps import StaticViewSitemap, CategorySitemap, ProductSitemap
 
@@ -47,6 +48,7 @@ urlpatterns = [
 
     # Auth
 
+    path('myaccount/', myaccount, name='myaccount'),
     path('signup/', signup, name='signup'),
     path('login/', views.LoginView.as_view(template_name='login.html'), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
@@ -57,6 +59,7 @@ urlpatterns = [
     path('api/add_to_cart/', api_add_to_cart, name='api_add_to_cart'),
     path('api/remove_from_cart/', api_remove_from_cart, name='api_remove_from_cart'),
     path('api/can_use/', api_can_use, name='api_can_use'),
+    path('api/add_subscriber/', api_add_subscriber, name='api_add_subscriber'),
 
     #Store
 

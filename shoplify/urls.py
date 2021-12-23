@@ -18,12 +18,14 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
+from django.contrib.auth import views
 
 from core.views import frontpage, contact, about, order_confirmation
 from store.views import product_detail, category_detail, search
 from cart.views import cart_detail, success
 from cart.webhook import webhook
 from coupon.api import api_can_use
+from userprofile.views import signup
 
 from store.api import api_add_to_cart, api_remove_from_cart, create_checkout_session
 from .sitemaps import StaticViewSitemap, CategorySitemap, ProductSitemap
@@ -42,6 +44,12 @@ urlpatterns = [
     path('order_confirmation/', order_confirmation, name='order_confirmation'),
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+
+    # Auth
+
+    path('signup/', signup, name='signup'),
+    path('login/', views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
 
     #API
 

@@ -4,6 +4,17 @@
 
 {% block content %}
     <div id="productapp">
+        <nav class="breadcrumb" aria-label="braedcrumbs">
+            <ul>
+                <li><a href="{% url 'frontpage' %}">Home</a></li>
+                {% if product.category.parent %}
+                    <li><a href="{% url 'category_detail' product.category.parent.slug %}">{{ product.category.parent.title }}</a></li>
+                {% endif %}
+                <li><a href="{% url 'category_detail' product.category.slug %}">{{ product.category.title }}</a></li>
+                <li class="is-active"><a href="{% url 'product_detail' product.category.slug product.slug %}">{{ product.title }}</a></li>
+            </ul>
+        </nav>
+
         <img :src="mainImage">
         {% if product.images.all %}
             <hr>
@@ -17,7 +28,7 @@
         {% endif %}
         <hr>
         <h1 class="title">{{ product.title }}</h1>
-        <h2 class="subtitle">₹{{ product.price }}, Stars: {{ product.get_rating|floatformat:1 }}</h2>
+        <h2 class="subtitle">₹{{ product.price }}, Stars: {% if product.get_rating == 0 %}No ratings yet{% else %}{{ product.get_rating|floatformat:1 }}{% endif %}</h2>
 
         {% if product.description %}
             <p>{{ product.description }}

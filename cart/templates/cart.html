@@ -184,9 +184,10 @@
                 first_name: '{{ first_name }}',
                 last_name: '{{ last_name }}',
                 email: '{{ email }}',
-                address: '',
-                zipcode: '',
-                place: '',
+                address: '{{ address }}',
+                zipcode: '{{ zipcode }}',
+                place: '{{ place }}',
+                phone: '{{ phone }}',
                 products: [{{ productstring|safe }}],
                 coupon_value: 0,
                 coupon_code: '',
@@ -238,6 +239,7 @@
                     'address': this.address,
                     'zipcode': this.zipcode,
                     'place': this.place,
+                    'phone': this.phone,
                     'coupon_code': this.coupon_code
                 }
 
@@ -265,6 +267,10 @@
 
                 if (data.place === '') {
                     this.errors.push('Place is empty')
+                }
+
+                if (data.phone === '') {
+                    this.errors.push('Phone is empty')
                 }
 
                 if (this.errors.length === 0) {

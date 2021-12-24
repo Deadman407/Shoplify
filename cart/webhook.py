@@ -6,6 +6,9 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+
+from order.views import render_to_pdf
 
 from order.models import Order
 
@@ -37,7 +40,23 @@ def webhook(request):
             product.num_available = product.num_avauilable - item.quantity
             product.save()
 
-        html = render_to_string('order_confirmation.html', {'orders': orders})
-        send_mail('Order confirmation', 'Your order has been sent!', 'noreply@shoplify.com', ['mail@shoplify.com', order.email], fail_silently=True, html_message=html)
+        subject ='Order confirmation'
+        from_email = 'noreply@shoplify.com'
+        to = ['mail@shoplify.com', order.email]
+        text_context = 'Your order is successful!'
+        html_content = render_to_string('order_confirmation.html', {'orders': orders})
+
+        pdf = render_to_pdf('order_pdf.html', {'order': order})
+
+        msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+        msg.attach_alternative(html_content, "text/html")
+
+        if pdf:
+            name = 'order_%s.pdf' % order.id
+            msg.attach(name, pdf,'application/pdf')
+        
+        msg.send()
+
+        #send_mail('Order confirmation', 'Your order has been sent!', 'noreply@shoplify.com', ['mail@shoplify.com', order.email], fail_silently=True, html_message=html)
 
     return HttpResponse(status=200)

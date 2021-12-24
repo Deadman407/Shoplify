@@ -5,9 +5,11 @@ from PIL import Image
 from django.contrib.auth.models import User
 
 class Category(models.Model):
+    parent = models.ForeignKey('self', related_name='children', on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255)
     ordering = models.IntegerField(default=0)
+    is_featured = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -28,6 +30,8 @@ class Product(models.Model):
     price = models.FloatField(max_length=255)
     is_featured = models.BooleanField(default=False)
     num_available = models.IntegerField(default=1)
+    num_visits = models.IntegerField(default=0)
+    last_visit = models.DateTimeField(blank=True, null=True)
 
     image = models.ImageField(upload_to='uploads/', blank=True, null=True)
     thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
@@ -62,7 +66,10 @@ class Product(models.Model):
     def get_rating(self):
         total = sum(int(review['stars']) for review in self.reviews.values())
 
-        return total / self.reviews.count()
+        if self.reviews.count() > 0:
+            return total / self.reviews.count()
+        else:
+            return 0
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)

@@ -23,6 +23,7 @@ from django.contrib.auth import views
 from core.views import frontpage, contact, about, order_confirmation
 from store.views import product_detail, category_detail, search
 from cart.views import cart_detail, success
+from order.views import admin_order_pdf
 from cart.webhook import webhook
 from coupon.api import api_can_use
 from userprofile.views import signup, myaccount
@@ -43,6 +44,7 @@ urlpatterns = [
     path('hooks/', webhook, name='webhook'),
     path('search/', search, name='search'),
     path('order_confirmation/', order_confirmation, name='order_confirmation'),
+    path('admin/admin_order_pdf/<int:order_id>/', admin_order_pdf, name='admin_order_pdf'),
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 
